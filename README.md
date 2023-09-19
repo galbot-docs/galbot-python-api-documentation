@@ -1,2 +1,2 @@
 # galbot-user-documentation
-Python API Documentation for GalbotRobot.
+galbot-user-documentation is a repository for Galbot user documentation.
