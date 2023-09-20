@@ -1,5 +1,7 @@
-# GalbotRobot Python API Documentation
+# Python API Documentation
+
 ## Documentation Header
+
 ```bash
 # Copyright (c) 2023 Galbot, Inc. All Rights Reserved.
 #
@@ -12,6 +14,7 @@
 # DERIVATIVE THEREOF, IS STRICTLY PROHIBITED. IF YOU HAVE RECEIVED THIS SOFTWARE IN
 # ERROR, PLEASE NOTIFY GALBOT, INC. IMMEDIATELY AND DELETE IT FROM YOUR SYSTEM.
 ```
+
 ```bash
 # Description: Python API Documentation for GalbotRobot
 # Version: 1.0
@@ -19,62 +22,71 @@
 # Author: Herman Ye
 # Warning: This file is only for galbot developers, unauthorized use is prohibited.
 ```
+
 ```bash
 # Revision History:
 #
 # Date       Version  Author       Description
 # ---------- -------- ------------ -----------------------------------------------
-# 2023-09-19 1.0.0      Herman Ye    Created
+# 2023-09-19 1.0.0    Herman Ye    Created
 ```
 
 ## Table of Contents
-- [Introduction](#introduction)
-- [Quick Start](#quick-start)
-  - [Import](#import)
-  - [Instantiate a robot object](#instantiate-a-robot-object)
-  - [Get the hardware data](#get-the-hardware-data)
-  - [Send commands](#send-commands)
-    - [Send a command with JSON protocol (synchronous)](#1-send-a-command-with-json-protocol-synchronous)
-    - [Send a command with JSON protocol (asynchronous)](#2-send-a-command-with-json-protocol-asynchronous)
-- [Related libraries](#related-libraries)
-  - [JSON](#json)
-  - [Socket](#socket)
-  - [Threading](#threading)
-  - [asyncio](#asyncio)
 
+* [Introduction](GalbotRobot\_Python\_API\_Documentation.md#introduction)
+* [Quick Start](GalbotRobot\_Python\_API\_Documentation.md#quick-start)
+  * [Import](GalbotRobot\_Python\_API\_Documentation.md#import)
+  * [Instantiate a robot object](GalbotRobot\_Python\_API\_Documentation.md#instantiate-a-robot-object)
+  * [Get the hardware data](GalbotRobot\_Python\_API\_Documentation.md#get-the-hardware-data)
+  * [Send commands](GalbotRobot\_Python\_API\_Documentation.md#send-commands)
+    * [Send a command with JSON protocol (synchronous)](GalbotRobot\_Python\_API\_Documentation.md#1-send-a-command-with-json-protocol-synchronous)
+    * [Send a command with JSON protocol (asynchronous)](GalbotRobot\_Python\_API\_Documentation.md#2-send-a-command-with-json-protocol-asynchronous)
+* [Related libraries](GalbotRobot\_Python\_API\_Documentation.md#related-libraries)
+  * [JSON](GalbotRobot\_Python\_API\_Documentation.md#json)
+  * [Socket](GalbotRobot\_Python\_API\_Documentation.md#socket)
+  * [Threading](GalbotRobot\_Python\_API\_Documentation.md#threading)
+  * [asyncio](GalbotRobot\_Python\_API\_Documentation.md#asyncio)
 
 ## Introduction
-This document describes the Python API for GalbotRobot. The GalbotRobot Python API is a Python module that provides a simple interface for communicating with GalbotRobot, getting hardware data, and sending commands to it. 
-It allows you to easily send commands to GalbotRobot and receive responses from it. The Python API is designed to be easy to use and understand, and it is intended for use by developers who are familiar with Python.
+
+This document describes the Python API for GalbotRobot. The GalbotRobot Python API is a Python module that provides a simple interface for communicating with GalbotRobot, getting hardware data, and sending commands to it. It allows you to easily send commands to GalbotRobot and receive responses from it. The Python API is designed to be easy to use and understand, and it is intended for use by developers who are familiar with Python.
 
 ## Quick Start
 
 ### Import
+
 First, you need to import the GalbotRobot module.
+
 ```python
 import GalbotRobot
-``` 
+```
+
 ### Instantiate a robot object
+
 Then, you need to instantiate a robot object with the `robot name` and `IP address` in local area network.
+
 ```python
 test_robot = GalbotRobot("Lucy","192.168.50.23")
 ```
 
 Tips: You can find host IP address with the following command in Linux terminal, try it on your robot.
+
 ```bash
 hostname -I
 ```
 
-
 ### Get the hardware data
+
 You can get the hardware data directly from the robot object after instantiating it.
 
 The hardware data is updated in real time by the background.
+
 ```python
 # IMU
 test_data_1 = test_robot.imu.angular_velocity.x
 print(f"Current angular velocity in x direction from IMU is {test_data_1}")
 ```
+
 ```python
 # Left arm
 test_data_2 = test_robot.left_arm.joint_angle_1
@@ -82,17 +94,21 @@ print(f"Current joint angle 1 of left arm is {test_data_2}")
 ```
 
 ### Send commands
-You can send a command to the robot with JSON protocol to control the robot. 
+
+You can send a command to the robot with JSON protocol to control the robot.
 
 The details of the JSON protocol can be found in the `JSON Protocol Documentation`.
+
 #### 1. Send a command with JSON protocol (synchronous)
+
 The default `GalbotRobot.send()` method is synchronous, which means that the main thread will be blocked until the response is received.
 
 For most commands, it won't take too long to get the response from the robot, so you can use the default `GalbotRobot.send()` method.
 
 For example, you can send a command to set the target joint angle of the left arm and get the response from the robot.
 
-- Command for setting the target joint angle of the left arm in JSON protocol
+* Command for setting the target joint angle of the left arm in JSON protocol
+
 ```json
 {
     "hardware_type": "left_arm",
@@ -108,7 +124,9 @@ For example, you can send a command to set the target joint angle of the left ar
     }
 }
 ```
-- Use the command in your Python code
+
+* Use the command in your Python code
+
 ```python
 # Construct the left arm joint angle setting command
 test_dictionary_data = {}
@@ -134,6 +152,7 @@ print(f"Result description: {left_arm_joint_angle_setting_result['message']}")
 ```
 
 #### 2. Send a command with JSON protocol (asynchronous)
+
 But for some commands, you may not care about the response from the robot or you don't want to wait for the response from the robot because it may take a long time to get the response from the robot.
 
 Let's take gripper setting command as an example, the main thread will be blocked until the `gripper_setting_result` is received.
@@ -164,8 +183,6 @@ print(f"Status description: {gripper_setting_result['message']}")
 print(f"Gripper stop position: {gripper_setting_result['data']['position']}")
 ```
 
-
-
 In this case, you can use the `async_mode = True` parameter to send the command asynchronously, which means you don't need to wait for the execution result of the gripper setting command.
 
 ```python
@@ -189,36 +206,32 @@ test_robot.send(test_dictionary_data, async_mode = True)
 print("The gripper setting command has been sent.")
 ```
 
-
-
-
-
-
 ## Related libraries
+
 ### JSON
+
 In Python, the `json` library is a built-in module that provides functions for working with JSON (JavaScript Object Notation) data. JSON is a lightweight data interchange format commonly used for data serialization and communication between a server and a client, as well as for storing configuration settings and data in a human-readable format.
 
-For more information about JSON, please refer to the official documentation:
-[Python JSON](https://docs.python.org/3/library/json.html).
+For more information about JSON, please refer to the official documentation: [Python JSON](https://docs.python.org/3/library/json.html).
+
 ### Socket
+
 The `socket` library in Python is a core module that provides a low-level interface for network communication. It allows you to create network sockets, which are endpoints for sending and receiving data over a network. Sockets are commonly used for building networked applications, such as client-server applications, chat programs, web servers, and more.
 
-For more information about Socket, please refer to the official documentation:
-[Python Socket](https://docs.python.org/3/library/socket.html).
-### Threading
-The `threading` library in Python is a module that provides a way to create and manage threads, which are lightweight sub-processes within a Python process. Threads allow you to run multiple tasks concurrently, making it easier to manage and perform tasks in parallel. Python's threading library is part of the standard library and is built on top of the lower-level _thread module.
+For more information about Socket, please refer to the official documentation: [Python Socket](https://docs.python.org/3/library/socket.html).
 
-For more information about Threading, please refer to the official documentation:
-[Python Threading](https://docs.python.org/3/library/threading.html).
+### Threading
+
+The `threading` library in Python is a module that provides a way to create and manage threads, which are lightweight sub-processes within a Python process. Threads allow you to run multiple tasks concurrently, making it easier to manage and perform tasks in parallel. Python's threading library is part of the standard library and is built on top of the lower-level \_thread module.
+
+For more information about Threading, please refer to the official documentation: [Python Threading](https://docs.python.org/3/library/threading.html).
 
 ### asyncio
-The `asyncio` library in Python is a module that provides a way to create and manage asynchronous tasks, which are lightweight sub-processes within a Python process. Asynchronous tasks allow you to run multiple tasks concurrently, making it easier to manage and perform tasks in parallel. Python's asyncio library is part of the standard library and is built on top of the lower-level _asyncio module.
 
-For more information about asyncio, please refer to the official documentation:
-[Python asyncio](https://docs.python.org/3/library/asyncio.html).
+The `asyncio` library in Python is a module that provides a way to create and manage asynchronous tasks, which are lightweight sub-processes within a Python process. Asynchronous tasks allow you to run multiple tasks concurrently, making it easier to manage and perform tasks in parallel. Python's asyncio library is part of the standard library and is built on top of the lower-level \_asyncio module.
 
-
+For more information about asyncio, please refer to the official documentation: [Python asyncio](https://docs.python.org/3/library/asyncio.html).
 
 **Note:**
 
-If you have any questions, please contact @Herman Ye (hermanye233@icloud.com) 
+If you have any questions, please contact @Herman Ye (hermanye233@icloud.com)
