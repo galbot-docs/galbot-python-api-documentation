@@ -9,3 +9,7 @@ Documentations for Galbot robots.
 {% content-ref url="json-protocol-documentation.md" %}
 [json-protocol-documentation.md](json-protocol-documentation.md)
 {% endcontent-ref %}
+
+{% content-ref url="generalizable-pouring-water-demo-documentation.md" %}
+[generalizable-pouring-water-demo-documentation.md](generalizable-pouring-water-demo-documentation.md)
+{% endcontent-ref %}
